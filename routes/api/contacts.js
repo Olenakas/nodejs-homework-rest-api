@@ -20,7 +20,7 @@ contactsRouter.get('/', contactController.getAll);
 
 contactsRouter.get('/:contactId', isValidId , contactController.getById);
 
-contactsRouter.post('/', upload,single("poster"), isEmptyBody, contactAddValidate, contactController.add);
+contactsRouter.post('/', upload.single("poster"), isEmptyBody, contactAddValidate, contactController.add);
 
 contactsRouter.delete('/:contactId', isValidId, contactController.deleteById);
 
