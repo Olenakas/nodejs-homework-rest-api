@@ -27,11 +27,11 @@ export const updateAvatar = async (req, res) => {
         throw err;
       });
 
-    const avatarUrl = path.join("avatars", filename);
+    const avatarURL = path.join("avatars", filename);
 
     const updateUser = await User.User.findByIdAndUpdate( 
       _id,
-      { avatarUrl },
+      { avatarURL },
       { new: true }
     );
 
