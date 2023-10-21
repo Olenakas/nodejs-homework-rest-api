@@ -37,7 +37,7 @@ export const updateAvatar = async (req, res) => {
 
     console.log(updateUser);
 
-    res.status(200).json({ avatarUrl: updateUser.avatarUrl }); 
+    res.status(200).json({ avatarUrl: updateUser.avatarURL }); 
 
   } catch (error) {
     console.log(error);
