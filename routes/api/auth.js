@@ -4,6 +4,7 @@ import { validateBody, authenticate, isEmptyBody } from "../../middlewares/index
 import { registerSchema, loginSchema, updateSubscriptionSchema } from "../../models/user.js";
 import userSchemas from "../../models/user.js";
 import { upload } from "../../middlewares/index.js"
+import { updateAvatar } from "../../controllers/updateAvatar.js";
 
 const registerValidate = validateBody(registerSchema);
 const loginValidate = validateBody(loginSchema);
@@ -27,10 +28,10 @@ authRouter.get("/current", authenticate, authController.getCurrent);
 authRouter.post("/logout", authenticate, authController.logout);
 
 // Update subscription
-authRouter.patch("/subscription", authenticate, updateSubscriptionValidate, authController.updateSubscription);
+authRouter.patch("/", authenticate, updateSubscriptionValidate, authController.updateSubscription);
 
-authRouter.patch("/", authenticate, upload.single("avatar"), updateSubscriptionValidate, authController.updateSubscription);
+authRouter.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);
 
-// authRouter.patch( "/", authenticate, updateSubscriptionValidate, authController.updateSubscription);
+
 
 export default authRouter;
