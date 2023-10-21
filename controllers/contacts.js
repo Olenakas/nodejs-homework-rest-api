@@ -46,14 +46,14 @@ const deleteById = async (req, res) => {
 
 const add = async (req, res) => {
   const { _id: owner } = req.user;
-  const { path: oldPath, filename } = req.file;
-  const newPath = path.join(posterPath, filename);
-  await fs.rename(oldPath, newPath)
+  // const { path: oldPath, filename } = req.file;
+  // const newPath = path.join(posterPath, filename);
+  // await fs.rename(oldPath, newPath)
   // console.log(req.body);
   // console.log(req.file);
-  const poster = path.join("posters", filename);
+  // const poster = path.join("posters", filename);
 
-  const result = await Contact.create ({...req.body, poster, owner});
+  const result = await Contact.create ({...req.body, owner});
   res.status(201).json(result);
 }
 
