@@ -4,6 +4,8 @@ import User from '../models/user.js';
 
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
+import "dotenv/config";
+import gravatar from "gravatar";
 
 const { JWT_SECRET } = process.env;
 
@@ -16,9 +18,11 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
 
+  const avatarURL = gravatar.url(email);
+
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.User.create({ ...req.body, password: hashPassword, avatarURL });
 
   res.status(201).json({ user: { email: newUser.email, subscription: newUser.subscription }  });
 };
