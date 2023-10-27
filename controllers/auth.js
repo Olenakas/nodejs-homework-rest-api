@@ -22,14 +22,14 @@ const register = async (req, res) => {
   const avatarURL = gravatar.url(email);
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const verificationCode = nanoid();
+  const verificationToken = nanoid();
 
-  const newUser = await User.User.create({ ...req.body, password: hashPassword, avatarURL, verificationCode });
+  const newUser = await User.User.create({ ...req.body, password: hashPassword, avatarURL, verificationToken });
 
       const verifyEmail = {
         to: email,
         subject: "Verify email",
-        html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationCode}">Click to verify email</a>`
+        html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click to verify email</a>`
     }
     await sendEmail(verifyEmail);
 
@@ -37,17 +37,17 @@ const register = async (req, res) => {
 };
 
 const verify = async (req, res) => {
-    const { verificationCode } = req.params;
-    const user = await User.User.findOne({ verificationCode });
+    const { verificationToken } = req.params;
+    const user = await User.User.findOne({ verificationToken });
     if (!user) {
-        throw HttpError(404)
+        throw HttpError(404, "User not found")
     }
 
-    await User.User.findByIdAndUpdate(user._id, { verify: true, verificationCode: "" });
+    await User.User.findByIdAndUpdate(user._id, { verify: true, verificationToken: null});
 
-    res.json({
-        message: "Verify success"
-    })
+    res.status(200).json({
+    message: "Verification successful",
+  });
 }
 
 const resendVerifyEmail = async (req, res) => {
@@ -57,19 +57,19 @@ const resendVerifyEmail = async (req, res) => {
         throw HttpError(404, "Email not found")
     }
     if (user.verify) {
-        throw HttpError(400, "Email already verify")
+        throw HttpError(400, "Verification has already been passed")
     }
 
     const verifyEmail = {
         to: email,
         subject: "Verify email",
-        html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationCode}">Click to verify email</a>`
+        html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Click to verify email</a>`
     }
     await sendEmail(verifyEmail);
 
-    res.json({
-        message: "Verify email send"
-    })
+    res.status(200).json({
+              message: "Verification email sent",
+      })
 }
 
 

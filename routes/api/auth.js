@@ -19,7 +19,7 @@ const authRouter = express.Router();
 // Sign Up
 authRouter.post("/register", isEmptyBody, registerValidate, authController.register);
 
-authRouter.get("/verify/:verificationCode", authController.verify);
+authRouter.get("/verify/:verificationToken", authController.verify);
 
 authRouter.post("/verify", isEmptyBody, userEmailValidate, authController.resendVerifyEmail);
 

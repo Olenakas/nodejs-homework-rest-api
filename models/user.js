@@ -26,18 +26,14 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
-
-
-        verify: {
-        type: Boolean,
-        default: false,
+    verify: {
+      type: Boolean,
+      default: false,
     },
-    verificationCode: {
-        type: String,
+    verificationToken: {
+      type: String,
+      required: [true, 'Verify token is required'],
     },
-   
-
-
     avatarURL: {
       type: String,
       required: true,
@@ -54,18 +50,24 @@ userSchema.post("findOneAndUpdate", handleSaveError);
 
 
 export const registerSchema = Joi.object({ 
-  email: Joi.string().pattern(emailRegExp).required(),
+  email: Joi.string().pattern(emailRegExp).required().messages({
+      "any.required": "missing required field email"
+    }),
   password: Joi.string().min(8).required(),
   subscription: Joi.string(),
 });
 
 export const loginSchema = Joi.object({
-  email: Joi.string().pattern(emailRegExp).required(),
+  email: Joi.string().pattern(emailRegExp).required().messages({
+      "any.required": "missing required field email"
+    }),
   password: Joi.string().min(8).required(),
 });
 
 export const userEmailSchema = Joi.object({
-    email: Joi.string().pattern(emailRegExp).required(),
+    email: Joi.string().pattern(emailRegExp).required().messages({
+      "any.required": "missing required field email"
+    }),
 })
 
 export const updateSubscriptionSchema = Joi.object({
